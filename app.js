@@ -44,8 +44,25 @@ const createInfoElements = (showTitle, showRating, showSummary) => {
     return overlay
 }
 
+const checkHoverBounds = (eventObj, overlay, overlayObj) => {
+    let windowHalfX = window.innerWidth / 2
+    if (eventObj.left > windowHalfX) {
+        let currLeftVal = Number(overlay.style.left.slice(0, -3))
+        let currTopVal = Number(overlay.style.top.slice(0, -3))
+        if (overlayObj.height > 347) {
+            console.log(overlayObj.height)
+            currTopVal -= 10
+            newShow.children[0].style.top = currTopVal + 'rem'
+        }
+        console.log('halfway')
+        currLeftVal -= 20
+        overlay.style.left = currLeftVal + 'rem'
+    } else {
+        console.log('not halfway')
+    }
+}
+
 const listQueries = (searchObj) => {
-    let loadImages = 0
     for (let e of searchObj) {
         const newShow = document.createElement('div')
         const showImg = document.createElement('img')
@@ -53,13 +70,26 @@ const listQueries = (searchObj) => {
         showImg.src = e.show.image.original
         let smallInfoOverlay = createInfoElements(e.show.name, e.show.rating.average, e.show.summary)
         newShow.append(smallInfoOverlay)
-        console.log(newShow)
         newShow.append(showImg)
         resultCont.append(newShow)
-
-        newShow.addEventListener('click', () => {
-            newShow.classList.toggle('small-screen-menu')
-        })
+        if (window.innerWidth < 700) {
+            newShow.addEventListener('click', () => {
+                newShow.classList.toggle('small-screen-menu')
+            })
+        } else {
+            newShow.addEventListener('mouseover', (e) => {
+                console.log('hober')
+                newShow.classList.add('big-screen-menu')
+            })
+            newShow.addEventListener('mouseout', () => {
+                console.log('not hober')
+                newShow.classList.remove('big-screen-menu')
+            })
+        }
+    }
+    let el = document.querySelectorAll('.movie-card')
+    for (let e of el) {
+        checkHoverBounds(e.getBoundingClientRect(), e.children[0], e.children[0].getBoundingClientRect())
     }
 }
 
@@ -93,3 +123,10 @@ form.addEventListener('submit', (e) => {
     }
     search()
 })
+
+// seperate
+
+// const el = document.querySelectorAll('.movie-card')
+// for(let e of el) {
+//     checkHoverBounds(e.getBoundingClientRect(), e.children[0])
+// }
