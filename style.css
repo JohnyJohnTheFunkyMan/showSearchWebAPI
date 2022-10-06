@@ -36,7 +36,7 @@
     position: relative;
     z-index: 3;
     margin-inline: auto;
-    width: 90%;
+    width: min(90%, 700px);
 }
 
 .menu {
@@ -75,6 +75,14 @@ form {
     border-radius: 0 2.5px 2.5px 0;
     background-color: #c3232c;
     border: none;
+    padding: 0.5rem 0.5rem;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+
+    font-size: 1rem;
 }
 
 .btn-text {
@@ -85,17 +93,27 @@ form {
     font-size: 2rem;
 }
 
+.search-rules-container {
+    position: relative;
+    z-index: 3;
+
+    width: min(90%, 1080px);
+    margin-inline: auto;
+}
+
 .search-results {
     /* border: 1px solid yellow; */
     width: 100%;
     margin-top: 5rem;
 
-    display: grid;
+    display: flex;
+    flex-direction: column;
     gap: 2.5rem;
 }
 
 .movie-card {
     overflow: hidden;
+    /* border: 1px solid yellow; */
 }
 
 .movie-card.small-screen-menu {
@@ -140,6 +158,39 @@ form {
     line-height: 1.5rem;
 }
 
+.movie-card.big-screen-menu {
+    position: relative;
+    overflow: visible;
+}
+
+.movie-card.big-screen-menu>img {
+    transform: scale(1.1);
+}
+
+.movie-card.big-screen-menu>.overlay {
+    padding-block: 1.25rem;
+    overflow: visible;
+    display: block;
+    position: absolute;
+    top: 2.5rem;
+    left: 2.5rem;
+    width: 30rem;
+    background-color: rgba(0, 0, 0, 0.9);
+    z-index: 100;
+}
+
+.movie-card.big-screen-menu>.overlay>.overlay-content-container {
+    width: 87.5%;
+    margin-inline: auto;
+    display: grid;
+    gap: 1rem;
+}
+
+.movie-card.big-screen-menu>.overlay>.overlay-content-container>.movie-title {
+    font-size: 2rem;
+    text-transform: capitalize;
+}
+
 .movie-card>img {
     border: 2.5px;
     width: 100%;
@@ -161,4 +212,35 @@ form {
     text-align: center;
     font-size: 2rem;
     text-transform: capitalize;
+}
+
+@media screen and (min-width: 700px) {
+
+    .background {
+        overflow: hidden;
+    }
+
+    .btn-text {
+        display: block;
+    }
+
+    .search-results {
+        /* border: 1px solid red; */
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .movie-card>img {
+        width: 10rem;
+    }
+
+    .movie-card:first-child {
+        border-radius: 0;
+    }
+
+    .movie-card:last-child {
+        border-radius: 0;
+    }
 }
