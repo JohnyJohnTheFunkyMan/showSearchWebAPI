@@ -4,6 +4,7 @@
     box-sizing: border-box;
     font-family: 'Roboto';
     color: white;
+    transition: 0.5s ease;
 }
 
 .background {
@@ -93,9 +94,67 @@ form {
     gap: 2.5rem;
 }
 
+.movie-card {
+    overflow: hidden;
+}
+
+.movie-card.small-screen-menu {
+    position: relative;
+    z-index: 4;
+}
+
+.movie-card.small-screen-menu>.overlay {
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 5;
+    height: 100%;
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.9);
+    padding-block: 1.25rem;
+    overflow-y: scroll;
+}
+
+.overlay {
+    display: none;
+}
+
+.movie-card.small-screen-menu>img {
+    transform: scale(1.1);
+}
+
+.movie-card.small-screen-menu>.overlay>.overlay-content-container {
+    width: 87.5%;
+    margin-inline: auto;
+    display: grid;
+    gap: 1rem;
+}
+
+.movie-card.small-screen-menu>.overlay>.overlay-content-container>.movie-title {
+    font-size: 3rem;
+    text-transform: capitalize;
+}
+
+.movie-card.small-screen-menu>.overlay>.overlay-content-container>.movie-summary {
+    line-height: 1.5rem;
+}
+
 .movie-card>img {
     border: 2.5px;
     width: 100%;
+}
+
+.fa-star {
+    color: yellow;
+}
+
+.movie-card:first-child {
+    border-radius: 10px 10px 0 0;
+}
+
+.movie-card:last-child {
+    border-radius: 0 0 10px 10px;
 }
 
 .no-search-results {
