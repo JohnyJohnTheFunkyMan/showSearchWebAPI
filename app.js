@@ -7,29 +7,30 @@ const submitQuery = async (searchTerm) => {
     return searchResults
 }
 
+const createMovieCard = (imgSrc) => {
+    let movieCard = document.createElement('div')
+    const movieImg = document.createElement('img')
+    movieCard.classList.add('movie-card')
+    movieImg.src = imgSrc
+    movieCard.append(movieImg)
+    return movieCard
+}
+
 const createInfoElements = (showTitle, showRating, showSummary) => {
-    const overlay = document.createElement('div')
-    overlay.classList.add('overlay')
-    const overlayContentContainer = document.createElement('div')
-    overlayContentContainer.classList.add('overlay-content-container')
-    const movieTitle = document.createElement('h1')
-    movieTitle.classList.add('movie-title')
+    const elementsArray = []
+    const elementsClasses = ['overlay', 'overlay-content-container', 'movie-title', 'rating', 'movie-rating', 'fa-solid', 'fa-solid', 'movie-summary']
+    const elementNames = ['div', 'div', 'h1', 'h2', 'span', 'i', 'i', 'p']
+    for (let index in elementNames) {
+        elementsArray.push(document.createElement(elementNames[index]))
+        elementsArray[index].classList.add(elementsClasses[index])
+    }
+    const [overlay, overlayContentContainer, movieTitle, rating, movieRating, starSymbol, starSymbol1, movieSummary] = elementsArray
+    starSymbol.classList.add('fa-star')
+    starSymbol1.classList.add('fa-star')
     movieTitle.innerHTML = showTitle
-    const rating = document.createElement('h2')
-    rating.classList.add('rating')
-    const movieRating = document.createElement('span')
-    movieRating.classList.add('movie-rating')
     if (showRating === null) showRating = 0
     movieRating.innerHTML = showRating
-    const starSymbol = document.createElement('i')
-    starSymbol.classList.add('fa-solid')
-    starSymbol.classList.add('fa-star')
-    const starSymbol1 = document.createElement('i')
-    starSymbol1.classList.add('fa-solid')
-    starSymbol1.classList.add('fa-star')
-    const overTen = document.createTextNode('/ 10')
-    const movieSummary = document.createElement('p')
-    movieSummary.classList.add('movie-summary')
+    const overTen = document.createTextNode(' / 10')
     movieSummary.innerHTML = showSummary
 
     overlay.append(overlayContentContainer)
@@ -44,31 +45,31 @@ const createInfoElements = (showTitle, showRating, showSummary) => {
     return overlay
 }
 
-const checkHoverBounds = (eventObj, overlay, overlayObj) => {
-    let windowHalfX = window.innerWidth / 2
-    if (eventObj.left > windowHalfX) {
-        let currLeftVal = Number(overlay.style.left.slice(0, -3))
-        let currTopVal = Number(overlay.style.top.slice(0, -3))
-        if (overlayObj.height > 347) {
-            console.log(overlayObj.height)
-            currTopVal -= 10
-            newShow.children[0].style.top = currTopVal + 'rem'
+const checkForBounds = () => {
+    const movies = document.querySelectorAll('.movie-card')
+    const windowHalfX = window.innerWidth / 2
+    const windowHalfY = (window.innerHeight / 2) + 100
+    for (let movie of movies) {
+        const movieObj = movie.getBoundingClientRect()
+        const movieHoverDiv = movie.children[1]
+        let currLeftVal = Number(movieHoverDiv.style.left.slice(0, -3))
+        let currTopVal = Number(movieHoverDiv.style.top.slice(0, -3))
+        if (movieObj.left > windowHalfX) {
+            currLeftVal -= 20
+            movieHoverDiv.style.left = currLeftVal + 'rem'
         }
-        currLeftVal -= 20
-        overlay.style.left = currLeftVal + 'rem'
-    } else {
+        if (movieObj.top > windowHalfY) {
+            currTopVal -= 10
+            movieHoverDiv.style.top = currTopVal + 'rem'
+        }
     }
 }
 
 const listQueries = (searchObj) => {
     for (let e of searchObj) {
-        const newShow = document.createElement('div')
-        const showImg = document.createElement('img')
-        newShow.classList.add('movie-card')
-        showImg.src = e?.show?.image?.original || 'assets/noImage.png'
+        const newShow = createMovieCard(e?.show?.image?.original || 'assets/noImage.png')
         let smallInfoOverlay = createInfoElements(e.show.name, e.show.rating.average, e.show.summary)
         newShow.append(smallInfoOverlay)
-        newShow.append(showImg)
         resultCont.append(newShow)
         if (window.innerWidth < 700) {
             newShow.addEventListener('click', () => {
@@ -83,21 +84,14 @@ const listQueries = (searchObj) => {
             })
         }
     }
-    let el = document.querySelectorAll('.movie-card')
-    for (let e of el) {
-        checkHoverBounds(e.getBoundingClientRect(), e.children[0], e.children[0].getBoundingClientRect())
-    }
+    window.innerWidth >= 700 && checkForBounds()
 }
 
 const search = async () => {
     try {
         const searchTerm = form.children[0].value
-        if (searchTerm === '') {
-            console.log('no search term!')
-            return 0
-        }
         const searchResults = await submitQuery(searchTerm)
-        if (searchResults.data.length === 0) {
+        if (!searchResults.data.length) {
             let nsr = document.createElement('p')
             nsr.classList.add('no-search-results')
             nsr.innerHTML = 'no search results found'
