@@ -65,7 +65,7 @@ const listQueries = (searchObj) => {
         const newShow = document.createElement('div')
         const showImg = document.createElement('img')
         newShow.classList.add('movie-card')
-        e.hasOwnProperty('original') ? showImg.src = e.show.image.original : showImg.src = 'assets/noImage.png'
+        showImg.src = e?.show?.image?.original || 'assets/noImage.png'
         let smallInfoOverlay = createInfoElements(e.show.name, e.show.rating.average, e.show.summary)
         newShow.append(smallInfoOverlay)
         newShow.append(showImg)
@@ -119,10 +119,3 @@ form.addEventListener('submit', (e) => {
     }
     search()
 })
-
-// seperate
-
-// const el = document.querySelectorAll('.movie-card')
-// for(let e of el) {
-//     checkHoverBounds(e.getBoundingClientRect(), e.children[0])
-// }
