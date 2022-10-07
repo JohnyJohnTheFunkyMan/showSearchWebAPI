@@ -54,11 +54,9 @@ const checkHoverBounds = (eventObj, overlay, overlayObj) => {
             currTopVal -= 10
             newShow.children[0].style.top = currTopVal + 'rem'
         }
-        console.log('halfway')
         currLeftVal -= 20
         overlay.style.left = currLeftVal + 'rem'
     } else {
-        console.log('not halfway')
     }
 }
 
@@ -67,7 +65,7 @@ const listQueries = (searchObj) => {
         const newShow = document.createElement('div')
         const showImg = document.createElement('img')
         newShow.classList.add('movie-card')
-        showImg.src = e.show.image.original
+        e.hasOwnProperty('original') ? showImg.src = e.show.image.original : showImg.src = 'assets/noImage.png'
         let smallInfoOverlay = createInfoElements(e.show.name, e.show.rating.average, e.show.summary)
         newShow.append(smallInfoOverlay)
         newShow.append(showImg)
@@ -78,11 +76,9 @@ const listQueries = (searchObj) => {
             })
         } else {
             newShow.addEventListener('mouseover', (e) => {
-                console.log('hober')
                 newShow.classList.add('big-screen-menu')
             })
             newShow.addEventListener('mouseout', () => {
-                console.log('not hober')
                 newShow.classList.remove('big-screen-menu')
             })
         }
